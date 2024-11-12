@@ -10,7 +10,7 @@ import (
 
 // redirect to /info
 func RedirectToInfo(c echo.Context) error {
-	return c.Redirect(http.StatusTemporaryRedirect, "/v1/users/info")
+	return c.Redirect(http.StatusTemporaryRedirect, "/api/v1/users/info")
 }
 
 // print hello world

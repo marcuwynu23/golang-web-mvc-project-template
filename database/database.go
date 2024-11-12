@@ -7,5 +7,4 @@ import (
 
 func Init() {
 	_ = mgm.SetDefaultConfig(nil, "ginApp", options.Client().ApplyURI("mongodb://localhost:27017"))
-	
 }
