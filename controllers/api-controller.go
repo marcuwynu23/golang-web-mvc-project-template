@@ -1,10 +1,13 @@
 package controllers
 
 import (
-  "net/http"
-  "github.com/labstack/echo/v4"
-  
+	"net/http"
+	"web_app/models"
+
+	"github.com/kamva/mgm/v3"
+	"github.com/labstack/echo/v4"
 )
+
 // redirect to /info
 func RedirectToInfo(c echo.Context) error {
 	return c.Redirect(http.StatusTemporaryRedirect, "/v1/users/info")
@@ -43,4 +46,16 @@ func Information(c echo.Context) error {
 	return c.JSON(http.StatusOK, message)
 }
 
+func UserCreate(c echo.Context) error {
+	user := &models.User{
+		Name:  "John Doe",
+		Email: "john.doe@example.com",
+	}
 
+	err := mgm.Coll(user).Create(user)
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+	return c.JSON(http.StatusOK, user)
+}

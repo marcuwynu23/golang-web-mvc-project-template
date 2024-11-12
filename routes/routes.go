@@ -2,6 +2,7 @@ package routes
 
 import (
 	"web_app/controllers"
+
 	"github.com/labstack/echo/v4"
 )
 
@@ -27,6 +28,7 @@ func RoutesRegister(e *echo.Echo) {
 	users.GET("/all", controllers.GetUsers)
 	// Route for printing "Hello, World!"
 	users.GET("/hello", controllers.HelloWorld)
+	users.GET("/create", controllers.UserCreate)
 	// create error handler for error routes
 	e.HTTPErrorHandler = controllers.ErrorHandler
 }
