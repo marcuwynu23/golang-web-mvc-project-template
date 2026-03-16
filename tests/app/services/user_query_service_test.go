@@ -4,7 +4,6 @@ import (
 	"context"
 	"testing"
 
-	"web_app/app/models"
 	"web_app/app/services"
 
 	"github.com/kamva/mgm/v3"

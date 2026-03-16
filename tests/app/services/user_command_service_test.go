@@ -8,7 +8,6 @@ import (
 	"web_app/app/services"
 
 	"github.com/kamva/mgm/v3"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -53,7 +52,7 @@ func TestCreateAndUpdateAndDeleteUser(t *testing.T) {
 		Name: "Updated",
 		Age:  30,
 	}
-	updated, err := services.UpdateUser(u.ID.(primitive.ObjectID), payload)
+	updated, err := services.UpdateUser(u.ID, payload)
 	if err != nil {
 		t.Fatalf("UpdateUser failed: %v", err)
 	}
@@ -62,7 +61,7 @@ func TestCreateAndUpdateAndDeleteUser(t *testing.T) {
 	}
 
 	// Delete
-	if err := services.DeleteUser(u.ID.(primitive.ObjectID)); err != nil {
+	if err := services.DeleteUser(u.ID); err != nil {
 		t.Fatalf("DeleteUser failed: %v", err)
 	}
 }
