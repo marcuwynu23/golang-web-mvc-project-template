@@ -11,15 +11,48 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestHelloWorld(t *testing.T) {
+func newContext(method, path string) (echo.Context, *httptest.ResponseRecorder) {
 	e := echo.New()
-	req := httptest.NewRequest(http.MethodGet, "/api/v1/users/hello", nil)
+	req := httptest.NewRequest(method, path, nil)
 	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
+	return e.NewContext(req, rec), rec
+}
 
-	if assert.NoError(t, controllers.HelloWorld(c)) {
-		assert.Equal(t, http.StatusOK, rec.Code)
-		assert.Equal(t, "Hello, World!", rec.Body.String())
-	}
+func TestHelloWorld(t *testing.T) {
+	c, rec := newContext(http.MethodGet, "/api/v1/users/hello")
+
+	err := controllers.HelloWorld(c)
+	assert.NoError(t, err)
+	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Equal(t, "Hello, World!", rec.Body.String())
+}
+
+func TestPrintHello(t *testing.T) {
+	c, rec := newContext(http.MethodGet, "/api/v1/users/print/John")
+	c.SetParamNames("name")
+	c.SetParamValues("John")
+
+	err := controllers.PrintHello(c)
+	assert.NoError(t, err)
+	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Equal(t, "Hello, John!", rec.Body.String())
+}
+
+func TestGetUsers(t *testing.T) {
+	c, rec := newContext(http.MethodGet, "/api/v1/users/all")
+
+	err := controllers.GetUsers(c)
+	assert.NoError(t, err)
+	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Contains(t, rec.Body.String(), "users")
+}
+
+func TestInformation(t *testing.T) {
+	c, rec := newContext(http.MethodGet, "/api/v1/users/info")
+
+	err := controllers.Information(c)
+	assert.NoError(t, err)
+	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Contains(t, rec.Body.String(), "Welcome to the API!")
 }
 

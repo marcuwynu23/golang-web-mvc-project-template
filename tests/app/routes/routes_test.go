@@ -11,19 +11,90 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestRoutesRegisterRoot(t *testing.T) {
+func setupEcho() *echo.Echo {
 	e := echo.New()
 	routes.RoutesRegister(e)
+	return e
+}
+
+func TestRoutesRootRedirect(t *testing.T) {
+	e := setupEcho()
 
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
 	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
+	e.ServeHTTP(rec, req)
 
-	h := e.Router().Find(http.MethodGet, "/", c)
-	if assert.NotNil(t, h) {
-		err := h(c)
-		assert.NoError(t, err)
-		assert.Equal(t, http.StatusTemporaryRedirect, rec.Code)
-	}
+	assert.Equal(t, http.StatusTemporaryRedirect, rec.Code)
+}
+
+func TestPageHome(t *testing.T) {
+	e := setupEcho()
+
+	req := httptest.NewRequest(http.MethodGet, "/page/home", nil)
+	rec := httptest.NewRecorder()
+	e.ServeHTTP(rec, req)
+
+	assert.Equal(t, http.StatusOK, rec.Code)
+}
+
+func TestApiV1RootRedirect(t *testing.T) {
+	e := setupEcho()
+
+	req := httptest.NewRequest(http.MethodGet, "/api/v1", nil)
+	rec := httptest.NewRecorder()
+	e.ServeHTTP(rec, req)
+
+	assert.Equal(t, http.StatusTemporaryRedirect, rec.Code)
+}
+
+func TestUsersRedirect(t *testing.T) {
+	e := setupEcho()
+
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/users", nil)
+	rec := httptest.NewRecorder()
+	e.ServeHTTP(rec, req)
+
+	assert.Equal(t, http.StatusTemporaryRedirect, rec.Code)
+}
+
+func TestUsersInfo(t *testing.T) {
+	e := setupEcho()
+
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/users/info", nil)
+	rec := httptest.NewRecorder()
+	e.ServeHTTP(rec, req)
+
+	assert.Equal(t, http.StatusOK, rec.Code)
+}
+
+func TestUsersAll(t *testing.T) {
+	e := setupEcho()
+
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/users/all", nil)
+	rec := httptest.NewRecorder()
+	e.ServeHTTP(rec, req)
+
+	assert.Equal(t, http.StatusOK, rec.Code)
+}
+
+func TestUsersHello(t *testing.T) {
+	e := setupEcho()
+
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/users/hello", nil)
+	rec := httptest.NewRecorder()
+	e.ServeHTTP(rec, req)
+
+	assert.Equal(t, http.StatusOK, rec.Code)
+}
+
+func TestUsersCreate(t *testing.T) {
+	e := setupEcho()
+
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/users/create", nil)
+	rec := httptest.NewRecorder()
+	e.ServeHTTP(rec, req)
+
+	// Depending on DB availability this may be 200 or 500; just assert it's not 404.
+	assert.NotEqual(t, http.StatusNotFound, rec.Code)
 }
 
