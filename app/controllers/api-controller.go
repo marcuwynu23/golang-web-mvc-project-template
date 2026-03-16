@@ -4,10 +4,9 @@ import (
 	"net/http"
 
 	"web_app/app/models"
+	"web_app/app/services"
 
-	"github.com/kamva/mgm/v3"
 	"github.com/labstack/echo/v4"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -28,8 +27,7 @@ func HelloWorld(c echo.Context) error {
 
 // GetUsers returns all users.
 func GetUsers(c echo.Context) error {
-	var users []models.User
-	err := mgm.Coll(&models.User{}).SimpleFind(&users, bson.M{})
+	users, err := services.ListUsers()
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, echo.Map{"error": err.Error()})
 	}
@@ -54,7 +52,7 @@ func CreateUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, echo.Map{"error": "invalid request body"})
 	}
 
-	if err := mgm.Coll(user).Create(user); err != nil {
+	if err := services.CreateUser(user); err != nil {
 		return c.JSON(http.StatusInternalServerError, echo.Map{"error": err.Error()})
 	}
 
@@ -69,8 +67,8 @@ func GetUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, echo.Map{"error": "invalid id"})
 	}
 
-	user := &models.User{}
-	if err := mgm.Coll(user).FindByID(id, user); err != nil {
+	user, err := services.GetUserByID(id)
+	if err != nil {
 		return c.JSON(http.StatusNotFound, echo.Map{"error": "user not found"})
 	}
 
@@ -85,31 +83,17 @@ func UpdateUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, echo.Map{"error": "invalid id"})
 	}
 
-	user := &models.User{}
-	if err := mgm.Coll(user).FindByID(id, user); err != nil {
-		return c.JSON(http.StatusNotFound, echo.Map{"error": "user not found"})
-	}
-
 	payload := &models.User{}
 	if err := c.Bind(payload); err != nil {
 		return c.JSON(http.StatusBadRequest, echo.Map{"error": "invalid request body"})
 	}
 
-	if payload.Name != "" {
-		user.Name = payload.Name
-	}
-	if payload.Email != "" {
-		user.Email = payload.Email
-	}
-	if payload.Age != 0 {
-		user.Age = payload.Age
-	}
-
-	if err := mgm.Coll(user).Update(user); err != nil {
+	updated, err := services.UpdateUser(id, payload)
+	if err != nil {
 		return c.JSON(http.StatusInternalServerError, echo.Map{"error": err.Error()})
 	}
 
-	return c.JSON(http.StatusOK, user)
+	return c.JSON(http.StatusOK, updated)
 }
 
 // DeleteUser deletes a user by ID.
@@ -120,12 +104,7 @@ func DeleteUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, echo.Map{"error": "invalid id"})
 	}
 
-	user := &models.User{}
-	if err := mgm.Coll(user).FindByID(id, user); err != nil {
-		return c.JSON(http.StatusNotFound, echo.Map{"error": "user not found"})
-	}
-
-	if err := mgm.Coll(user).Delete(user); err != nil {
+	if err := services.DeleteUser(id); err != nil {
 		return c.JSON(http.StatusInternalServerError, echo.Map{"error": err.Error()})
 	}
 
