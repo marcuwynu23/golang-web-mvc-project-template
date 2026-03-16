@@ -44,7 +44,7 @@ endif
 APP_BIN = $(APP_NAME)-$(GOOS)-$(GOARCH)$(APP_EXE_SUFFIX)
 
 
-.PHONY: dev start build clean
+.PHONY: dev start build clean test
 
 dev: 
 	air
@@ -54,6 +54,9 @@ start:
 
 build:
 	GOOS=$(GOOS) GOARCH=$(GOARCH) go build -o $(APP_BUILD_DIR)/$(APP_BIN) $(APP_SRC_DIR)/$(APP_MAIN_FILE)
+
+test:
+	go test ./tests/...
 
 clean:
 	rm -Rf $(APP_BUILD_DIR)/$(APP_BIN)
