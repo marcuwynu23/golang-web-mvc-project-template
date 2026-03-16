@@ -1,18 +1,28 @@
 package routes_test
 
 import (
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
+	"web_app/app/database"
 	"web_app/app/routes"
 
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 )
 
+type dummyRenderer struct{}
+
+func (d *dummyRenderer) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
+	_, err := w.Write([]byte("ok"))
+	return err
+}
+
 func setupEcho() *echo.Echo {
 	e := echo.New()
+	e.Renderer = &dummyRenderer{}
 	routes.RoutesRegister(e)
 	return e
 }
@@ -88,6 +98,9 @@ func TestUsersHello(t *testing.T) {
 }
 
 func TestUsersCreate(t *testing.T) {
+	// ensure mgm is configured so UserCreate does not panic
+	database.Init()
+
 	e := setupEcho()
 
 	req := httptest.NewRequest(http.MethodGet, "/api/v1/users/create", nil)
