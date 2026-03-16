@@ -235,6 +235,97 @@ You can also configure these via real environment variables in production instea
 
 ---
 
+## Service Configuration (Linux & Windows)
+
+### Linux: systemd service
+
+On a Linux host using `systemd`, you can run the compiled binary as a service.
+
+1. **Build the binary** (example for Linux amd64):
+
+   ```bash
+   make build GOOS=linux GOARCH=amd64
+   ```
+
+2. **Copy artifacts to a target directory** (for example `/opt/webapp`):
+
+   ```bash
+   sudo mkdir -p /opt/webapp
+   sudo cp build/webapp-linux-amd64 /opt/webapp/webapp
+   sudo cp .env /opt/webapp/.env
+   sudo cp -r views /opt/webapp/views
+   ```
+
+3. **Create a `systemd` unit file**, for example `/etc/systemd/system/webapp.service`:
+
+   ```ini
+   [Unit]
+   Description=Golang Web MVC Project Template
+   After=network.target
+
+   [Service]
+   Type=simple
+   WorkingDirectory=/opt/webapp
+   ExecStart=/opt/webapp/webapp
+   Restart=on-failure
+   EnvironmentFile=/opt/webapp/.env
+
+   [Install]
+   WantedBy=multi-user.target
+   ```
+
+4. **Reload and start the service**:
+
+   ```bash
+   sudo systemctl daemon-reload
+   sudo systemctl enable webapp
+   sudo systemctl start webapp
+   sudo systemctl status webapp
+   ```
+
+### Windows: service via `sc.exe`
+
+On Windows you can install the compiled binary as a service using `sc.exe`.
+
+1. **Build a Windows binary** (from a dev machine or CI):
+
+   ```bash
+   make build GOOS=windows GOARCH=amd64
+   ```
+
+   This produces something like:
+
+   ```text
+   build\webapp-windows-amd64.exe
+   ```
+
+2. **Copy artifacts to a directory**, for example:
+
+   ```text
+   C:\webapp\
+     webapp.exe
+     .env
+     views\...
+   ```
+
+3. **Create the service** (run in an elevated PowerShell or Command Prompt):
+
+   ```powershell
+   sc.exe create WebApp binPath= "C:\webapp\webapp.exe" start= auto
+   ```
+
+4. **Start and manage the service**:
+
+   ```powershell
+   sc.exe start WebApp
+   sc.exe stop WebApp
+   sc.exe delete WebApp   # to remove the service
+   ```
+
+Make sure the service account has read access to the application directory and `.env` file. In more advanced setups you may want to externalize configuration to real environment variables rather than relying solely on `.env`.
+
+---
+
 ## License
 
-This template is provided under the **MIT License** (see `APP_LICENSE` details in `makefile`). Adapt it freely to your own projects.
+This template is provided under the **MIT License**. See the `LICENSE` file for the full license text. Adapt it freely to your own projects.
