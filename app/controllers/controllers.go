@@ -1,9 +1,9 @@
 package controllers
 
 import (
-  "net/http"
-  "github.com/labstack/echo/v4"
-  
+	"net/http"
+
+	"github.com/labstack/echo/v4"
 )
 
 // function to handle errors
@@ -17,3 +17,4 @@ func ErrorHandler(err error, c echo.Context) {
 		"error": err.Error(),
 	})
 }
+

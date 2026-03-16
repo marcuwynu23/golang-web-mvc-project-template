@@ -2,9 +2,9 @@ package main
 
 import (
 	"log"
-	"web_app/database"
-	"web_app/middleware"
-	"web_app/routes"
+	"web_app/app/database"
+	"web_app/app/middleware"
+	"web_app/app/routes"
 
 	"github.com/labstack/echo/v4"
 )

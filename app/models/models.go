@@ -39,3 +39,4 @@ func (u *User) BeforeSave() error {
 	}
 	return nil
 }
+

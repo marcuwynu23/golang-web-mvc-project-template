@@ -20,7 +20,7 @@ APP_LICENSE_TEXT = MIT License
 
 APP_DIST_DIR = dist
 APP_BUILD_DIR = build
-APP_SRC_DIR = src
+APP_SRC_DIR = app
 APP_MAIN_FILE = main.go
 APP_CONFIG_DIR = config
 APP_LOG_DIR = log
@@ -50,11 +50,11 @@ dev:
 	air
 
 start:
-	go run $(APP_MAIN_FILE)
+	go run $(APP_SRC_DIR)/$(APP_MAIN_FILE)
 
 build:
-	GOOS=$(GOOS) GOARCH=$(GOARCH) go build -o $(APP_DIST_DIR)/$(APP_BIN)
+	GOOS=$(GOOS) GOARCH=$(GOARCH) go build -o $(APP_BUILD_DIR)/$(APP_BIN) $(APP_SRC_DIR)/$(APP_MAIN_FILE)
 
 clean:
-	rm -Rf $(APP_DIST_DIR)/$(APP_BIN)
-	rmdir $(APP_DIST_DIR)
+	rm -Rf $(APP_BUILD_DIR)/$(APP_BIN)
+	rmdir $(APP_BUILD_DIR)

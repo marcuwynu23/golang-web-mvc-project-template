@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"web_app/controllers"
+	"web_app/app/controllers"
 
 	"github.com/labstack/echo/v4"
 )
@@ -32,3 +32,4 @@ func RoutesRegister(e *echo.Echo) {
 	// create error handler for error routes
 	e.HTTPErrorHandler = controllers.ErrorHandler
 }
+

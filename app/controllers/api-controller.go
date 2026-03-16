@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"net/http"
-	"web_app/models"
+	"web_app/app/models"
 
 	"github.com/kamva/mgm/v3"
 	"github.com/labstack/echo/v4"
@@ -59,3 +59,4 @@ func UserCreate(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, user)
 }
+
