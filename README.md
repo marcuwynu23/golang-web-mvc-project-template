@@ -1,37 +1,48 @@
-# Golang Web MVC Project Template
+<div align="center">
 
-This is a minimal MVC-style web application template built with **Go**, **Echo**, and **MongoDB**, structured for clarity and testability.
+<h1>Golang Web MVC Project Template</h1>
 
-It uses:
+<p>
+  <img alt="Go Version" src="https://img.shields.io/badge/Go-1.23%2B-00ADD8?style=for-the-badge&logo=go">
+  <img alt="Echo" src="https://img.shields.io/badge/Web%20Framework-Echo-4B32C3?style=for-the-badge">
+  <img alt="MongoDB" src="https://img.shields.io/badge/Database-MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white">
+  <img alt="License" src="https://img.shields.io/badge/License-MIT-000000?style=for-the-badge">
+</p>
 
-- `app/` for all application code (controllers, routes, middleware, models, services, utils, database, main entrypoint)
-- `views/` for HTML views
-- `tests/app/` for unit and integration tests grouped by feature
-- `.env` for configuration (with `.env.example` as a reference)
+</div>
+
+---
+
+**Highlights**:
+
+- Clean layered architecture (controllers → services → models).
+- Ready-to-use user CRUD API.
+- Structured tests by feature (`tests/app/**`).
+- `.env`-driven configuration with sensible defaults.
 
 ---
 
 ## Features
 
-- Echo-based HTTP server with grouped routes
-- MVC-ish structure with a services layer:
-  - `controllers`: HTTP request handlers (minimal orchestration)
-  - `services`: application/business logic split into query & command services
-  - `models`: Mongo-backed domain models (via `mgm`)
-  - `routes`: centralized route registration
-  - `middleware`: logging, CORS, and HTML template renderer
-  - `utils`: generic helpers (e.g., pointer helper)
-- MongoDB integration using `github.com/kamva/mgm/v3`
-- `.env` configuration via `github.com/joho/godotenv`
-- User CRUD API:
-  - `GET  /api/v1/users/all` – list all users
-  - `POST /api/v1/users` – create user
-  - `GET  /api/v1/users/:id` – get user by ID
-  - `PUT  /api/v1/users/:id` – update user
-  - `PATCH /api/v1/users/:id` – partial update (same handler)
-  - `DELETE /api/v1/users/:id` – delete user
-- Basic test suite for routes, controllers, middleware, models, and database init
-- Makefile for common tasks (`dev`,`dev-watch`, `start`, `build`, `test`, `clean`)
+- **Echo-based HTTP server** with grouped routes.
+- **Layered architecture** with clear responsibilities:
+  - `controllers`: thin HTTP request handlers (validation and orchestration only).
+  - `services`: business logic (split into query and command services).
+  - `models`: Mongo-backed domain models (via `mgm`).
+  - `routes`: centralized route registration.
+  - `middleware`: logging, CORS, and HTML template rendering.
+  - `utils`: generic helpers (for example, pointer helpers).
+- **MongoDB integration** using `github.com/kamva/mgm/v3`.
+- **Environment-based configuration** via `github.com/joho/godotenv`.
+- **User CRUD API**:
+  - `GET  /api/v1/users/all` – list all users.
+  - `POST /api/v1/users` – create user.
+  - `GET  /api/v1/users/:id` – get user by ID.
+  - `PUT  /api/v1/users/:id` – update user.
+  - `PATCH /api/v1/users/:id` – partial update (same handler).
+  - `DELETE /api/v1/users/:id` – delete user.
+- **Test suite** for routes, controllers, middleware, models, services, utils, and database initialization.
+- **Makefile** for common tasks (`dev`, `dev-watch`, `start`, `build`, `test`, `clean`).
 
 ---
 
@@ -108,16 +119,28 @@ It uses:
 
 From the project root:
 
-- **Development (go run)**
+- **Development (simple run)**
 
   ```bash
   make dev
   ```
 
-- **Development Watch**
+  This runs:
+
+  ```bash
+  go run app/main.go
+  ```
+
+- **Development watch (requires a file watcher such as Air)**
 
   ```bash
   make dev-watch
+  ```
+
+  After installing `air`, you can also run:
+
+  ```bash
+  air -c .air.toml
   ```
 
 - **Production-style start**
@@ -126,7 +149,7 @@ From the project root:
   make start
   ```
 
-  This is functionally similar to `make dev` but kept separate for customization.
+  This target is functionally similar to `make dev` but is kept separate so you can introduce production-specific flags or behavior later.
 
 ---
 
