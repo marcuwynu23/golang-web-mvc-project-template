@@ -24,11 +24,14 @@ func RoutesRegister(e *echo.Echo) {
 	users.GET("", controllers.RedirectToInfo)
 	// Information about the users API
 	users.GET("/info", controllers.Information)
-	// Route for getting all users
-	users.GET("/all", controllers.GetUsers)
-	// Route for printing "Hello, World!"
-	users.GET("/hello", controllers.HelloWorld)
-	users.GET("/create", controllers.UserCreate)
+	// CRUD routes
+	users.GET("/all", controllers.GetUsers)          // list
+	users.POST("", controllers.CreateUser)           // create
+	users.GET("/:id", controllers.GetUser)           // get by id
+	users.PUT("/:id", controllers.UpdateUser)        // full update
+	users.PATCH("/:id", controllers.UpdateUser)      // partial update (same handler)
+	users.DELETE("/:id", controllers.DeleteUser)     // delete
+	users.GET("/hello", controllers.HelloWorld)      // demo
 	// create error handler for error routes
 	e.HTTPErrorHandler = controllers.ErrorHandler
 }
