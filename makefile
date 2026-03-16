@@ -18,8 +18,7 @@ APP_LICENSE = MIT
 APP_LICENSE_URL = https://opensource.org/licenses/MIT
 APP_LICENSE_TEXT = MIT License
 
-APP_DIST_DIR = dist
-APP_BUILD_DIR = build
+APP_BUILD_DIR = dist
 APP_SRC_DIR = app
 APP_MAIN_FILE = main.go
 APP_CONFIG_DIR = config
@@ -59,6 +58,8 @@ start:
 
 build:
 	GOOS=$(GOOS) GOARCH=$(GOARCH) go build -o $(APP_BUILD_DIR)/$(APP_BIN) $(APP_SRC_DIR)/$(APP_MAIN_FILE)
+	cp .env $(APP_BUILD_DIR)/.env
+	cp -r $(APP_VIEWS_DIR) $(APP_BUILD_DIR)/views
 
 test:
 	go test ./tests/...
