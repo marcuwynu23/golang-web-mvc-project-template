@@ -4,7 +4,7 @@ This is a minimal MVC-style web application template built with **Go**, **Echo**
 
 It uses:
 
-- `app/` for all application code (controllers, routes, middleware, models, database, main entrypoint)
+- `app/` for all application code (controllers, routes, middleware, models, services, utils, database, main entrypoint)
 - `views/` for HTML views
 - `tests/app/` for unit and integration tests grouped by feature
 - `.env` for configuration (with `.env.example` as a reference)
@@ -14,11 +14,13 @@ It uses:
 ## Features
 
 - Echo-based HTTP server with grouped routes
-- MVC-ish structure:
-  - `controllers`: request handlers
+- MVC-ish structure with a services layer:
+  - `controllers`: HTTP request handlers (minimal orchestration)
+  - `services`: application/business logic split into query & command services
   - `models`: Mongo-backed domain models (via `mgm`)
   - `routes`: centralized route registration
   - `middleware`: logging, CORS, and HTML template renderer
+  - `utils`: generic helpers (e.g., pointer helper)
 - MongoDB integration using `github.com/kamva/mgm/v3`
 - `.env` configuration via `github.com/joho/godotenv`
 - User CRUD API:
@@ -40,9 +42,11 @@ It uses:
 ├─ app/
 │  ├─ main.go              # Application entrypoint
 │  ├─ routes/              # Route registration
-│  ├─ controllers/         # HTTP handlers & API logic
+│  ├─ controllers/         # HTTP handlers (thin, call services)
+│  ├─ services/            # User services (query/command)
 │  ├─ middleware/          # Echo middleware + template renderer
 │  ├─ models/              # Domain models (Mongo/MGM)
+│  ├─ utils/               # Generic helpers (e.g., Ptr)
 │  └─ database/            # MongoDB initialization
 ├─ views/                  # HTML templates (Echo renderer)
 ├─ tests/
@@ -51,7 +55,9 @@ It uses:
 │     ├─ routes/           # Route tests
 │     ├─ middleware/       # Middleware tests
 │     ├─ models/           # Model tests
-│     └─ database/         # Database init tests
+│     ├─ database/         # Database init tests
+│     ├─ services/         # Service-layer tests (query & command)
+│     └─ utils/            # Helper/utility tests
 ├─ .env                    # Local environment config (not committed)
 ├─ .env.example            # Sample env config
 ├─ makefile                # Build and test automation
