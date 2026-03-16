@@ -44,10 +44,15 @@ endif
 APP_BIN = $(APP_NAME)-$(GOOS)-$(GOARCH)$(APP_EXE_SUFFIX)
 
 
-.PHONY: dev start build clean test
+.PHONY: dev dev-watch start build clean test
+
 
 dev: 
 	go run $(APP_SRC_DIR)/$(APP_MAIN_FILE)
+
+dev-watch:
+	air -c .air.toml
+
 
 start:
 	go run $(APP_SRC_DIR)/$(APP_MAIN_FILE)
