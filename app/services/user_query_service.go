@@ -9,8 +9,9 @@ import (
 )
 
 // ListUsers returns all users.
+// It always returns a non-nil slice, even when empty.
 func ListUsers() ([]models.User, error) {
-	var users []models.User
+	users := make([]models.User, 0)
 	err := mgm.Coll(&models.User{}).SimpleFind(&users, bson.M{})
 	return users, err
 }
