@@ -31,7 +31,7 @@ It uses:
   - `PATCH /api/v1/users/:id` – partial update (same handler)
   - `DELETE /api/v1/users/:id` – delete user
 - Basic test suite for routes, controllers, middleware, models, and database init
-- Makefile for common tasks (`dev`, `start`, `build`, `test`, `clean`)
+- Makefile for common tasks (`dev`,`dev-watch`, `start`, `build`, `test`, `clean`)
 
 ---
 
@@ -99,7 +99,6 @@ It uses:
 3. **Ensure MongoDB is running**
 
    For local development, the default URI assumes:
-
    - Host: `localhost`
    - Port: `27017`
 
@@ -113,6 +112,12 @@ From the project root:
 
   ```bash
   make dev
+  ```
+
+- **Development Watch**
+
+  ```bash
+  make dev-watch
   ```
 
 - **Production-style start**
@@ -210,4 +215,3 @@ You can also configure these via real environment variables in production instea
 ## License
 
 This template is provided under the **MIT License** (see `APP_LICENSE` details in `makefile`). Adapt it freely to your own projects.
-
