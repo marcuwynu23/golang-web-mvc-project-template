@@ -47,7 +47,7 @@ APP_BIN = $(APP_NAME)-$(GOOS)-$(GOARCH)$(APP_EXE_SUFFIX)
 .PHONY: dev start build clean test
 
 dev: 
-	air
+	go run $(APP_SRC_DIR)/$(APP_MAIN_FILE)
 
 start:
 	go run $(APP_SRC_DIR)/$(APP_MAIN_FILE)
